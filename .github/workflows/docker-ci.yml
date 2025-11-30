@@ -1,0 +1,24 @@
+name: Build and push Docker Image
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+  steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Login to DockerHub
+      uses: docker/login-actions@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build Docker image
+      run: docker build -t  ${{ secrets.DOCKERHUB_USERNAME }}/docker-ci-practice:latest .
+
+    - name: Push Docker image
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/docker-ci-practice:latest
